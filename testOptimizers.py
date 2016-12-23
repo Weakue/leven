@@ -23,7 +23,7 @@ optimizersColorLookup = {'SteepestDescent': 'green', 'Newton': 'blue', 'NewtonGa
                          'LevenbergMarquardt': 'yellow'}
 
 # we can create new function(which use same interface)
-functionClass = functions.Rosenbrock
+functionClass = functions.PowerFunct
 
 """
 Plot function on the interval.
@@ -59,7 +59,7 @@ def is_sequence(arg):
 #save image after N iterations
 printStep = 1
 #work excactly maxIteration count. No rules to stop optimizers
-maxIteration = 100
+maxIteration = 50
 # need save images and make GIF after that. If False it' finish much faster
 needSaveImage = True
 currentIteration = 0
@@ -67,7 +67,8 @@ optimizers = optimizers.getOptimizers(functionClass.function, functionClass.init
                                       jacobi=functionClass.jacobi,
                                       hesse=functionClass.hesse,
                                       interval=functionClass.interval,
-                                      function_array=functionClass.function_array
+                                      function_array=functionClass.function_array,
+                                      fun=functionClass.fun()
                                       )
 fig, ax = initAxes(optimizers)
 plotter = plot.GifPlotter(fig, ax)
