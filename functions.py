@@ -327,11 +327,12 @@ class Pauell:
 
 
 class ForLMS:
+    #2,714, 140,4, 1707, 31,51
     initialPoint = (2.7, 90, 1500, 10)
     camera = (41, 75)
     interval = [(0, 5), (0, 5), (0, 5), (0, 5)]
 
-    aArray = np.array((0, 0.428, 1, 1.61, 2.09, 3.48, 5.25)) / 10 ** 3
+    aArray = np.array((0, 0.428, 1, 1.61, 2.09, 3.48, 5.25)) / (10 ** 3)
     bArray = np.array((7.391, 11.18, 16.44, 16.2, 22.2, 24.02, 31.32))
     """
         Cost function value

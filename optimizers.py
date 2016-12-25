@@ -92,7 +92,7 @@ class NewtonGaussOptimizer(Optimizer):
 
 class LevenbergMarquardtOptimizer(Optimizer):
     def __init__(self, function, initialPoint, gradient=None, jacobi=None, hesse=None,
-                 interval=None, function_array=None, learningRate=1, basicFunct=None):
+                 interval=None, function_array=None, learningRate=1.5, basicFunct=None):
         self.learningRate = learningRate
         functionNew = lambda x: np.array([function(x)])
         super().__init__(functionNew, initialPoint, gradient, jacobi, hesse, interval, function_array=function_array, basicFunct=basicFunct)
@@ -119,7 +119,7 @@ class LevenbergMarquardtOptimizer(Optimizer):
         d_lm = - np.dot(leftPartInverse, g)  # moving direction
         x_new = self.x + self.learningRate * d_lm.reshape((-1))  # line search
         grain_numerator = (self.getF(self.x) - self.getF(x_new))
-        gain_divisor = 0.5* np.dot(d_lm.T, self.m*d_lm-g) + 1e-10
+        gain_divisor = 0.2 * np.dot(d_lm.T, self.m*d_lm-g) + 1e-10
         gain = grain_numerator / gain_divisor
         if gain > 0:  # it's a good function approximation.
             self.move_next(x_new) # ok, step acceptable

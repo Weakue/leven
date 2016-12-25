@@ -23,7 +23,7 @@ optimizersColorLookup = {'SteepestDescent': 'green', 'Newton': 'blue', 'NewtonGa
                          'LevenbergMarquardt': 'yellow'}
 
 # we can create new function(which use same interface)
-functionClass = functions.ForLMS
+functionClass = functions.Pauell
 
 """
 Plot function on the interval.
@@ -62,7 +62,7 @@ def is_sequence(arg):
 # save image after N iterations
 printStep = 1
 # work excactly maxIteration count. No rules to stop optimizers
-maxIteration = 100
+maxIteration = 500
 # need save images and make GIF after that. If False it' finish much faster
 needSaveImage = True
 currentIteration = 0
@@ -76,17 +76,21 @@ optimizers = optimizers.getOptimizers(functionClass.function, functionClass.init
 fig, ax = initAxes(optimizers)
 plotter = plot.GifPlotter(fig, ax)
 
-while currentIteration <= maxIteration:
+yBefore = 1
+y = 0
+sum = 12
+while currentIteration <= maxIteration and sum > 0.000000000000000000001:
     for optimizer in optimizers:
         yBefore = optimizer.y
         xBefore = optimizer.x
 
         x, y = optimizer.next_point()
+
+        sum = np.sqrt(np.mean((np.array(x) - np.array(xBefore)) ** 2))
         if is_sequence(y):
             y = y[0]
         if is_sequence(yBefore):
             yBefore = yBefore[0]
-
         plotter.plotLine([xBefore[0], x[0]], [xBefore[1], x[1]], [yBefore, y], optimizersColorLookup[optimizer.name])
         if len(x) > 2:
             print(
@@ -101,7 +105,6 @@ while currentIteration <= maxIteration:
         plotter.fixImage(currentIteration)
 
     currentIteration += 1
-
 if needSaveImage:
     plotter.savegif('movie.gif')
     webbrowser.open(path.join(path.dirname(__file__), 'movie.gif'))
