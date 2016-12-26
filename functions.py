@@ -9,6 +9,9 @@
 import numpy as np
 import math as mth
 
+DEFAULT_LEARNING_RATE = 1.2
+DEFAULT_STEP = 100
+DEFAULT_GAIN_DIV_MULTIPLIER = 0.2
 """
 Rosenbrock function https://en.wikipedia.org/wiki/Rosenbrock_function
 f(x,y) = (a-x)^2 + b(y-x^2)^2
@@ -21,7 +24,10 @@ As result f(x,y) = 0.5(1-x)^2 + 0.5(y-x^2)^2
 
 
 class Rosenbrock:
-    initialPoint = (-1.2, -1)
+    step = 21
+    gain_div_multplier = 0.3
+    learning_rate = 1.1
+    initial_point = (-1.2, -1)
     camera = (41, 75)
     interval = [(-2, 2), (-2, 2)]
 
@@ -63,13 +69,16 @@ class Rosenbrock:
         return 0.5 * (1 - X) ** 2 + 0.5 * (Y - X ** 2) ** 2
 
 
-class PowerFunct:
-    initialPoint = (0, 1)
+class PowerFunction:
+    step = 60
+    gain_div_multplier = 0.1
+    learning_rate = 1.4
+    initial_point = (0, 1)
     camera = (41, 75)
     interval = [(-5, 10), (-5, 10)]
 
     """
-    Cost function value
+    Cost function value`
     (x 1 -x 2 ) 2 +(x 1 +x 2 -10) 2 /9
     """
 
@@ -164,9 +173,11 @@ class PowerFunct:
 #         return 0.5 * (1 - X) ** 2 + 0.5 * (Y - X ** 2) ** 2
 
 
-
-class AsymVallye:
-    initialPoint = (0, -1)
+class AsymVally:
+    step = 68
+    gain_div_multplier = DEFAULT_GAIN_DIV_MULTIPLIER+0.1
+    learning_rate = DEFAULT_LEARNING_RATE+0.1
+    initial_point = (0, -1)
     camera = (41, 75)
     interval = [(0, 5), (0, 5)]
 
@@ -270,7 +281,10 @@ class AsymVallye:
 #         return 0.5*(1-X)**2 + 0.5*(Y - X**2)**2
 
 class Pauell:
-    initialPoint = (3, -1, 0, 1)
+    step = 35
+    gain_div_multplier = 0.09
+    learning_rate = 1.68
+    initial_point = (3, -1, 0, 1)
     camera = (41, 75)
     interval = [(0, 5), (0, 5), (0, 5), (0, 5)]
 
@@ -327,8 +341,11 @@ class Pauell:
 
 
 class ForLMS:
-    #2,714, 140,4, 1707, 31,51
-    initialPoint = (2.7, 90, 1500, 10)
+    # 2,714, 140,4, 1707, 31,51
+    step = 500
+    gain_div_multplier = DEFAULT_GAIN_DIV_MULTIPLIER+0.1
+    learning_rate = DEFAULT_LEARNING_RATE+0.5
+    initial_point = (2.7, 90, 1500, 10)
     camera = (41, 75)
     interval = [(0, 5), (0, 5), (0, 5), (0, 5)]
 
@@ -367,7 +384,7 @@ class ForLMS:
 
         for i in range(len(a)):
             func.append((((x[0] ** 2 + a[i] * x[1] ** 2 + (a[i] ** 2) * x[2] ** 2) / (
-                (1 + x[3] ** 2 * a[i]) * b[i])) - 1)*10**2)
+                (1 + x[3] ** 2 * a[i]) * b[i])) - 1) * 10 ** 2)
 
         return np.array(func).reshape(7, 1)
 
@@ -410,16 +427,18 @@ class ForLMS:
 
     @staticmethod
     def jacobi(x):
-        result = [[],[],[],[],[],[],[]]
+        result = [[], [], [], [], [], [], []]
         a = ForLMS.aArray
         b = ForLMS.bArray
         for i in range(len(a)):
-            result[i].append(10**2*2*x[0]/(b[i]+x[3]**2*a[i]*b[i]))
-            result[i].append(10 ** 2 * 2 * x[1]*a[i] / (b[i] + x[3] ** 2 * a[i] * b[i]))
-            result[i].append(10 ** 2 * 2 * x[2] *a[i]**2 / (b[i] + x[3] ** 2 * a[i] * b[i]))
-            result[i].append(-10*x[0]**2*2*x[3]*a[i]*b[i]/(b[i]+x[3]**2*a[i]*b[i])**2
-                             -10**2*x[1]**2*a[i]*2*x[3]*a[i]*b[i]/(b[i]+x[3]**2*a[i]*b[i])**2
-                             -10**2*x[2]**2*a[i]**2*2*x[3]*a[i]*b[i]/(b[i]+x[3]**2*a[i]*b[i])**2)
+            result[i].append(10 ** 2 * 2 * x[0] / (b[i] + x[3] ** 2 * a[i] * b[i]))
+            result[i].append(10 ** 2 * 2 * x[1] * a[i] / (b[i] + x[3] ** 2 * a[i] * b[i]))
+            result[i].append(10 ** 2 * 2 * x[2] * a[i] ** 2 / (b[i] + x[3] ** 2 * a[i] * b[i]))
+            result[i].append(-10 * x[0] ** 2 * 2 * x[3] * a[i] * b[i] / (b[i] + x[3] ** 2 * a[i] * b[i]) ** 2
+                             - 10 ** 2 * x[1] ** 2 * a[i] * 2 * x[3] * a[i] * b[i] / (
+                                 b[i] + x[3] ** 2 * a[i] * b[i]) ** 2
+                             - 10 ** 2 * x[2] ** 2 * a[i] ** 2 * 2 * x[3] * a[i] * b[i] / (
+                                 b[i] + x[3] ** 2 * a[i] * b[i]) ** 2)
 
         return np.array(result)
 

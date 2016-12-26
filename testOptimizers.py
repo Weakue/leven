@@ -23,7 +23,7 @@ optimizersColorLookup = {'SteepestDescent': 'green', 'Newton': 'blue', 'NewtonGa
                          'LevenbergMarquardt': 'yellow'}
 
 # we can create new function(which use same interface)
-functionClass = functions.Pauell
+functionClass = functions.ForLMS
 
 """
 Plot function on the interval.
@@ -31,8 +31,6 @@ Plot legend using optimizersColorLookup for optimizers
 Init camera at convenient position
 All it needs is in functionClass
 """
-print(functionClass.function((2.714,140.4,1707,31.51)))
-
 def initAxes(optimizers):
     interval = functionClass.interval
     fig = plt.figure()
@@ -62,44 +60,43 @@ def is_sequence(arg):
 # save image after N iterations
 printStep = 1
 # work excactly maxIteration count. No rules to stop optimizers
-maxIteration = 500
+maxIteration = functionClass.step
 # need save images and make GIF after that. If False it' finish much faster
 needSaveImage = True
 currentIteration = 0
-optimizers = optimizers.getOptimizers(functionClass.function, functionClass.initialPoint, functionClass.gradient,
+optimizers = optimizers.getOptimizers(functionClass.function, functionClass.initial_point, functionClass.gradient,
                                       jacobi=functionClass.jacobi,
                                       hesse=functionClass.hesse,
                                       interval=functionClass.interval,
                                       function_array=functionClass.function_array,
-                                      fun=None
+                                      fun=None,
+                                      learning_rate=functionClass.learning_rate,
+                                      step=functionClass.step,
+                                      gain_div_multiplier=functionClass.gain_div_multplier
                                       )
 fig, ax = initAxes(optimizers)
 plotter = plot.GifPlotter(fig, ax)
 
-yBefore = 1
-y = 0
-sum = 12
-while currentIteration <= maxIteration and sum > 0.000000000000000000001:
+while currentIteration <= maxIteration:
     for optimizer in optimizers:
         yBefore = optimizer.y
         xBefore = optimizer.x
 
         x, y = optimizer.next_point()
-
-        sum = np.sqrt(np.mean((np.array(x) - np.array(xBefore)) ** 2))
+        # sum = y-yBefore
         if is_sequence(y):
             y = y[0]
         if is_sequence(yBefore):
             yBefore = yBefore[0]
         plotter.plotLine([xBefore[0], x[0]], [xBefore[1], x[1]], [yBefore, y], optimizersColorLookup[optimizer.name])
+
         if len(x) > 2:
             print(
-                "Iteration = {0} Optimizer = {1} X1 = {2} X2 = {3} X3 = {4} X4 = {5} Z = {6}".format(
-                    currentIteration, optimizer.name, x[0], x[1], x[2], x[3], y))
+                "Iteration = %d  X1 = %.5f X2 = %.5f X3 = %.5f X4 = %.7f Z = %.7f" %
+                (currentIteration,  x[0], x[1], x[2], x[3], y))
         else:
             print(
-                "Iteration = {0} Optimizer = {1} X = {2} Y = {3} Z = {4}".format(currentIteration, optimizer.name, x[0],
-                                                                                 x[1], y))
+                "Iteration = %d X = %.8f Y = %.8f Z = %.8f" % (currentIteration,  x[0], x[1], y))
 
     if currentIteration % printStep == 0 and needSaveImage:
         plotter.fixImage(currentIteration)
