@@ -1,11 +1,3 @@
-# Author: Evgeny Semyonov <DragonSlights@yandex.ru>
-# Repository: https://github.com/lightforever/Levenberg_Manquardt
-
-# Licensed under the Apache License, Version 2.0 (the "License").
-# You may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# http://www.apache.org/licenses/LICENSE-2.0
-
 import numpy as np
 import math as mth
 
@@ -281,7 +273,7 @@ class AsymVally:
 #         return 0.5*(1-X)**2 + 0.5*(Y - X**2)**2
 
 class Pauell:
-    step = 35
+    step = 200
     gain_div_multplier = 0.09
     learning_rate = 1.68
     initial_point = (3, -1, 0, 1)
@@ -342,7 +334,7 @@ class Pauell:
 
 class ForLMS:
     # 2,714, 140,4, 1707, 31,51
-    step = 500
+    step = 109
     gain_div_multplier = DEFAULT_GAIN_DIV_MULTIPLIER+0.1
     learning_rate = DEFAULT_LEARNING_RATE+0.5
     initial_point = (2.7, 90, 1500, 10)

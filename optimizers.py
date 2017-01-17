@@ -1,11 +1,3 @@
-# Author: Evgeny Semyonov <DragonSlights@yandex.ru>
-# Repository: https://github.com/lightforever/Levenberg_Manquardt
-
-# Licensed under the Apache License, Version 2.0 (the "License").
-# You may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# http://www.apache.org/licenses/LICENSE-2.0
-
 from abc import ABCMeta, abstractmethod
 import numpy as np
 
@@ -47,50 +39,6 @@ class Optimizer:
         self.x = nextX
         return self.x, self.y
 
-
-# class SteepestDescentOptimizer(Optimizer):
-#     def __init__(self, function, initialPoint, gradient=None, jacobi=None, hesse=None,
-#                  interval=None, function_array=None, learningRate=0.05):
-#         super().__init__(function, initialPoint, gradient, jacobi, hesse, interval, function_array=function_array)
-#         self.learningRate = learningRate
-#
-#     def next_point(self):
-#         nextX = self.x - self.learningRate * self.gradient(self.x)
-#         return self.move_next(nextX)
-
-
-# class NewtonOptimizer(Optimizer):
-#     def __init__(self, function, initialPoint, gradient=None, jacobi=None, hesse=None,
-#                  interval=None, function_array=None, learningRate=0.05):
-#         super().__init__(function, initialPoint, gradient, jacobi, hesse, interval, function_array=function_array)
-#         self.learningRate = learningRate
-#
-#     def next_point(self):
-#         hesse = self.hesse(self.x)
-#         # if Hessian matrix if positive - Ok, otherwise we are going in wrong direction, changing to gradient descent
-#         if is_pos_def(hesse):
-#             hesseInverse = np.linalg.inv(hesse)
-#             nextX = self.x - self.learningRate * np.dot(hesseInverse, self.gradient(self.x))
-#         else:
-#             nextX = self.x - self.learningRate * self.gradient(self.x)
-#
-#         return self.move_next(nextX)
-
-
-# class NewtonGaussOptimizer(Optimizer):
-#     def __init__(self, function, initialPoint, gradient=None, jacobi=None, hesse=None,
-#                  interval=None, function_array=None, learningRate=1):
-#         super().__init__(function, initialPoint, gradient, jacobi, hesse, interval, function_array=function_array)
-#         self.learningRate = learningRate
-#
-#     def next_point(self):
-#         # Solve (J_t * J)d_ng = -J*f
-#         jacobi = self.jacobi(self.x)
-#         jacobisLeft = np.dot(jacobi.T, jacobi)
-#         jacobiLeftInverse = np.linalg.inv(jacobisLeft)
-#         jjj = np.dot(jacobiLeftInverse, jacobi.T)  # (J_t * J)^-1 * J_t
-#         nextX = self.x - self.learningRate * np.dot(jjj, self.function_array(self.x)).reshape((-1))
-#         return self.move_next(nextX)
 
 
 class LevenbergMarquardtOptimizer(Optimizer):

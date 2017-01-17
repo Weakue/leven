@@ -1,10 +1,3 @@
-# Author: Evgeny Semyonov <DragonSlights@yandex.ru>
-# Repository: https://github.com/lightforever/Levenberg_Manquardt
-
-# Licensed under the Apache License, Version 2.0 (the "License").
-# You may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# http://www.apache.org/licenses/LICENSE-2.0
 
 import webbrowser
 
@@ -92,11 +85,11 @@ while currentIteration <= maxIteration:
 
         if len(x) > 2:
             print(
-                "Iteration = %d  X1 = %.5f X2 = %.5f X3 = %.5f X4 = %.7f Z = %.7f" %
+                "Iteration = %d  X1 = %.10f X2 = %.5f X3 = %.5f X4 = %.7f Z = %.1000f" %
                 (currentIteration,  x[0], x[1], x[2], x[3], y))
         else:
             print(
-                "Iteration = %d X = %.8f Y = %.8f Z = %.8f" % (currentIteration,  x[0], x[1], y))
+                "Iteration = %d X = %.8f Y = %.8f Z = %.10000f" % (currentIteration,  x[0], x[1], y))
 
     if currentIteration % printStep == 0 and needSaveImage:
         plotter.fixImage(currentIteration)
